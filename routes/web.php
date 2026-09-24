@@ -6,7 +6,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\KundaliController;
 
-include_once("Admin.php");
+require_once __DIR__ . '/Admin.php';
 
 Route::get('', [HomeController::class, 'index']);
 Route::get('index', [HomeController::class, 'index']);

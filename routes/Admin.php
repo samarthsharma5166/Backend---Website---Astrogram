@@ -18,7 +18,7 @@ use App\Http\Controllers\Admin\AstrologerController;
 */
 
 
-Route::group(['prefix' => env('admin')], function(){
+Route::group(['prefix' => config('app.admin', env('admin', 'backendLoginPanel'))], function(){
 
 Route::get('', [AuthController::class, 'index'])->name('adminLogin');
 Route::get('login', [AuthController::class, 'index'])->name('adminLogin');
