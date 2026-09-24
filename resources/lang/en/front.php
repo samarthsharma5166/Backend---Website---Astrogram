@@ -4,7 +4,7 @@ return [
 
     'login_button' => "Login",
     'logout' => 'Logout',
-    'app_title' => 'AstroTalky',
+    'app_title' => 'Astro by rudragram',
     // Info / Birth Details
     'user_info' => 'User Information',
     'birth_chart_details' => 'Provide your Birth Chart Details',
@@ -30,7 +30,7 @@ return [
     'birth_chart' => 'Birth Chart',
     'home' => 'Home',
     'contact_us' => 'Contact Us',
-    'footer' => 'AstroTalky. Mapping the cosmos for your evolution.',
+    'footer' => 'Astro by rudragram. Mapping the cosmos for your evolution.',
     // Account
     'my_profile' => 'My Account',
     'wallet_balance' => 'Wallet Balance',
@@ -56,12 +56,12 @@ return [
     'debit' => 'Debit',
 
     // Email
-    'new_contact_enquiry' => 'New Contact Us Enquiry from AstroTalky',
+    'new_contact_enquiry' => 'New Contact Us Enquiry from Astro by rudragram',
     'hello_admin' => 'Hello Admin,',
     'contact_enquiry_desc' => 'You have received a new contact enquiry. Below are the details:',
     'regards' => 'Regards,',
-    'system_name' => 'AstroTalky System',
-    'all_rights' => 'AstroTalky. All rights reserved.',
+    'system_name' => 'Astro by rudragram System',
+    'all_rights' => 'Astro by rudragram. All rights reserved.',
     'message' => 'Message',
     'category' => 'Category',
     'subject' => 'Subject',
@@ -125,7 +125,7 @@ return [
 
     // Layout / Common
     'about_us' => 'About Us',
-    'about_title' => 'About AstroTalky',
+    'about_title' => 'About Astro by rudragram',
     'terms' => 'Terms',
     'privacy' => 'Privacy',
     'services' => 'Services',
@@ -187,7 +187,7 @@ return [
     'chat_start_error' => 'Sorry, we could not start the chat. Please try again.',
     'insufficient_balance_error' => 'Insufficient wallet balance. Chat ended.',
     'contact_enquiry_title' => 'Contact Us Enquiry',
-    'new_enquiry_header' => 'New Contact Us Enquiry from AstroTalky',
+    'new_enquiry_header' => 'New Contact Us Enquiry from Astro by rudragram',
     'hello_admin' => 'Hello Admin,',
     'enquiry_received' => 'You have received a new contact enquiry. Below are the details:',
     'phone' => 'Phone',
@@ -195,7 +195,7 @@ return [
     'category' => 'Category',
     'message' => 'Message',
     'regards' => 'Regards,',
-    'system_name' => 'AstroTalky System',
+    'system_name' => 'Astro by rudragram System',
     'user_info' => 'User Information',
     'provide_birth_details' => 'Provide your Birth Chart Details',
     'unlock_insights' => 'Unlock personal insights and precise predictions by providing your exact birth details. Our ancient wisdom meets modern accuracy.',

@@ -2,7 +2,7 @@
 
 return [
 
-    "title" => "AstroTalky",
+    "title" => "Astro by rudragram",
     "desc"  => "Tiffin Delivery Management System",
     'pass_error' => "Password should be atleast 6 chtater long",
     'confirm_error' => "Confirm password does not match",

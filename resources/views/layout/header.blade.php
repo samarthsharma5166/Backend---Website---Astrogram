@@ -1,13 +1,16 @@
 <header class="sticky top-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
     <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white">
-                <span class="material-symbols-outlined text-2xl">auto_awesome</span>
-            </div>
-            <a href="{{ Asset('index') }}">
+            <a href="{{ Asset('index') }}" class="flex items-center gap-3">
+                @if(getSetting() && getSetting()->logo)
+                    <img src="{{ Asset('upload/admin/'.getSetting()->logo) }}" alt="Logo" class="w-11 h-11 object-contain rounded-full border border-gray-200 dark:border-gray-700 shadow-sm">
+                @else
+                    <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white">
+                        <span class="material-symbols-outlined text-2xl">auto_awesome</span>
+                    </div>
+                @endif
                 <h1 class="text-2xl font-black tracking-tight text-nebula-indigo dark:text-white uppercase">{{ __('front.app_title') }}</h1>
             </a>
-
         </div>
         <nav class="hidden md:flex items-center gap-10">
             <a class="text-sm font-bold hover:text-primary transition-colors uppercase tracking-wider" href="{{ Asset('index') }}">{{ __('front.home') }}</a>
