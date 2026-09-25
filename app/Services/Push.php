@@ -66,7 +66,7 @@ class Push
 			CURLOPT_POST => true,
 			CURLOPT_POSTFIELDS => json_encode($payload),
 			CURLOPT_HTTPHEADER => [
-				"Authorization: Key $restKey",
+				"Authorization: Basic $restKey",
 				"Content-Type: application/json"
 			],
 			CURLOPT_SSL_VERIFYPEER => false
@@ -77,10 +77,11 @@ class Push
 		curl_close($ch);
 
 		if ($err) {
+			\Log::error("OneSignal cURL Error: " . $err);
 			return "cURL Error #: " . $err;
 		}
 
-	
+		\Log::info("OneSignal Push Response: " . $response);
 		return $response;
 	}
 }
