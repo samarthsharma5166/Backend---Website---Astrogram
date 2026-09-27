@@ -14,64 +14,108 @@ use Redirect;
 use Stripe;
 use Mail;
 use Str;
+use Log;
 use Twilio\Rest\Client;
+
 class AuthController extends Controller {
 	
 	public function login(Request $Request)
     {
-        User::where('country',$Request->get('country'))->where('phone',$Request->get('phone'))->where('status',0)->delete();
+        $country = preg_replace('/[^0-9]/', '', (string)$Request->get('country'));
+        $phone   = preg_replace('/[^0-9]/', '', (string)$Request->get('phone'));
 
-        $res        = User::where('country',$Request->get('country'))->where('phone',$Request->get('phone'))->where('status',1)->first();
-        $setting    = getSetting();
+        if (empty($phone)) {
+            return response()->json(['msg' => 'error', 'error' => 'Phone number is required.'], 422);
+        }
 
-        if(!isset($res->id))
+        // Clean unverified draft records
+        User::where('country', $country)->where('phone', $phone)->where('status', 0)->delete();
+
+        // Find active user if exists
+        $res = User::where('country', $country)->where('phone', $phone)->where('status', 1)->first();
+        $setting = getSetting();
+
+        if (!isset($res->id))
         {
-            $otp                    = rand(1111,9999);
-            $res                    = new User;
-            $res->id                = time().rand(1111,99999);
-            $res->country           = $Request->get('country');
-            $res->phone             = $Request->get('phone');
-            $res->free_minute       = getSetting()->free_chat_minute;
-            $res->vcode             = $otp;
+            $res              = new User;
+            $res->id          = (string)(time() . rand(1111, 99999));
+            $res->country     = $country;
+            $res->phone       = $phone;
+            $res->free_minute = $setting ? (float)$setting->free_chat_minute : 5;
+            $res->status      = 0;
+            $res->vcode       = rand(1000, 9999);
             $res->save();
         }
        
-        if($setting->verify_type == 1)
+        if ($setting && $setting->verify_type == 1)
         {
             $res->status = 1;
+            $res->vcode  = 0;
             $res->save();
             
-            $token = $res->createToken($res->phone)->plainTextToken;
+            $token = $res->createToken($res->phone ?: 'auth_token')->plainTextToken;
 
             return response()->json([
-                
-            'msg'       => 'done',
-            'user_data' => ['id' => $res->id,'name' => $res->name,'phone' => $res->country.$res->phone],
-            'token'     => $token
-            
+                'msg'       => 'done',
+                'user_data' => [
+                    'id'    => $res->id,
+                    'name'  => $res->name,
+                    'phone' => $res->country . $res->phone
+                ],
+                'token'     => $token
             ]);
         }
         else
         {
-            $this->sendOtp($res,$setting);
+            try {
+                $this->sendOtp($res, $setting);
 
-            return response()->json(['msg' => 'otp','user_id' => $res->id,'phone' => $res->country.$res->phone]);
+                return response()->json([
+                    'msg'     => 'otp',
+                    'user_id' => $res->id,
+                    'phone'   => $res->country . $res->phone
+                ]);
+            } catch (\Exception $e) {
+                Log::error('Twilio/SMS sendOtp error in login: ' . $e->getMessage());
+                return response()->json([
+                    'msg'   => 'error',
+                    'error' => 'Failed to send OTP SMS: ' . $e->getMessage()
+                ], 500);
+            }
         }
     }
 
     public function resendCode(Request $Request)
     {
-        $res            = User::find($Request->get('user_id'));
-        $setting        = getSetting();
+        $userId = $Request->get('user_id');
+        $res = User::find($userId);
 
-        $this->sendOtp($res,$setting);
-        
-        return response()->json(['user_id' => $res->id,'phone' => $res->country.$res->phone]);
+        if (!$res) {
+            return response()->json(['msg' => 'error', 'error' => 'User not found.'], 404);
+        }
+
+        $setting = getSetting();
+
+        try {
+            $this->sendOtp($res, $setting);
+            return response()->json([
+                'msg'     => 'otp',
+                'user_id' => $res->id,
+                'phone'   => $res->country . $res->phone
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Twilio/SMS sendOtp error in resendCode: ' . $e->getMessage());
+            return response()->json([
+                'msg'   => 'error',
+                'error' => 'Failed to resend OTP: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function verifyCode(Request $request)
     {
-        $user = User::find($request->get('user_id'));
+        $userId = $request->get('user_id');
+        $user = User::find($userId);
 
         if (!$user) {
             return response()->json([
@@ -80,43 +124,20 @@ class AuthController extends Controller {
             ], 404);
         }
 
-        // Check OTP expiry
-        if (!$user->otp_expires_at || now()->greaterThan($user->otp_expires_at)) {
+        $submittedCode = trim((string)$request->get('vcode'));
+        $storedCode    = (string)(int)$user->vcode;
+
+        // Verify OTP matches
+        if (empty($user->vcode) || $submittedCode !== $storedCode) {
             return response()->json([
                 'msg'   => 'error',
-                'error' => 'OTP expired. Please request a new one.'
-            ], 403);
-        }
-
-        // Check max attempts (3 recommended)
-        if ($user->otp_attempts >= 3) {
-            return response()->json([
-                'msg'   => 'error',
-                'error' => 'Too many invalid attempts. Please request a new OTP.'
-            ], 429);
-        }
-
-        //Verify OTP (constant-time)
-        if (!hash_equals(
-            $user->vcode,
-            hash('sha256', $request->get('vcode'))
-        )) {
-            $user->increment('otp_attempts');
-
-            return response()->json([
-                'msg'   => 'error',
-                'error' => 'Invalid OTP. Please try again.'
+                'error' => 'Invalid OTP code. Please try again.'
             ], 401);
         }
 
-        //OTP is valid
+        // OTP is valid
         $user->status = 1;
-
-        //Invalidate OTP
-        $user->vcode = null;
-        $user->otp_expires_at = null;
-        $user->otp_attempts = 0;
-
+        $user->vcode  = 0;
         $user->save();
 
         // Web login if needed
@@ -124,7 +145,7 @@ class AuthController extends Controller {
             Auth::login($user);
         }
 
-        //Create API token
+        // Create API token
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
@@ -138,41 +159,45 @@ class AuthController extends Controller {
         ]);
     }
 
-    public function sendOtp($res,$setting)
+    public function sendOtp($res, $setting)
     {
-       $otp = random_int(1000, 9999);
+        $otp = random_int(1000, 9999);
+        $res->vcode = $otp;
+        $res->save();
 
-        if($setting->verify_type == 2)
+        if ($setting && $setting->verify_type == 2)
         {
-            $client = new Client($setting->t_sid,$setting->t_auth);
+            if (empty($setting->t_sid) || empty($setting->t_auth) || empty($setting->t_from)) {
+                throw new \Exception('Twilio credentials (SID, Auth Token, or From number) are missing in Settings.');
+            }
 
-            $client->messages->create("+".$res->country.$res->phone, [
-            'from' => $setting->t_from,
-            'body' => 'Your AstroTalky OTP is '.$otp.'. Please use it to verify your mobile number.'
+            $client = new Client($setting->t_sid, $setting->t_auth);
+            $cleanCountry = preg_replace('/[^0-9]/', '', (string)$res->country);
+            $cleanPhone   = preg_replace('/[^0-9]/', '', (string)$res->phone);
+            $toPhone      = "+" . $cleanCountry . $cleanPhone;
+
+            $client->messages->create($toPhone, [
+                'from' => $setting->t_from,
+                'body' => 'Your OTP is ' . $otp . '. Please use it to verify your mobile number.'
             ]);
-
-            $res->vcode             = hash('sha256', $otp);
-            $res->otp_expires_at    = now()->addMinutes(5);
-            $res->otp_attempts      = 0;
-            $res->save();
         }
-        else
+        else if ($setting && $setting->verify_type == 3 && !empty($setting->other_sms_api))
         {
-            $msg = 'Your AstroTalky OTP is '.$otp.'. Please use it to verify your mobile number.';
+            $msg = 'Your OTP is ' . $otp . '. Please use it to verify your mobile number.';
             $msg = urlencode($msg);
-            $url = $setting->sms_api;
-            $url = str_replace(['{num}','{msg}','{other}'],[$res->phone,$msg,""], $url);
+            $url = $setting->other_sms_api;
+            $url = str_replace(['{num}', '{msg}', '{other}'], [$res->phone, $msg, ""], $url);
 
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-            curl_setopt($ch, CURLOPT_URL,$url);
+            curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            $output = curl_exec ($ch);
-            $info = curl_getinfo($ch);
-            $http_result = $info ['http_code'];
-            curl_close ($ch);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            $output = curl_exec($ch);
+            curl_close($ch);
         }
 
         return true;
     }
 }
+
