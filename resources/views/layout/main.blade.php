@@ -74,13 +74,13 @@
 <div class="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row justify-between items-center gap-8">
 <div class="flex items-center gap-3">
 @if(getSetting() && getSetting()->logo)
-    <img src="{{ Asset('upload/admin/'.getSetting()->logo) }}" alt="Logo" class="w-9 h-9 object-contain rounded-full border border-gray-200 dark:border-gray-700 shadow-sm">
+    <img src="{{ Asset('upload/admin/'.getSetting()->logo) }}" alt="Logo" class="w-10 h-10 object-contain rounded-full border border-gray-200 dark:border-gray-700 shadow-sm">
 @else
     <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">
         <span class="material-symbols-outlined text-xl">auto_awesome</span>
     </div>
 @endif
-<h5 class="text-xl font-black text-nebula-indigo dark:text-white uppercase">@lang('front.app_title')</h5>
+<h5 class="text-xl font-black text-nebula-indigo dark:text-white uppercase">AI ASTRO BY RUDRAGRAM</h5>
 </div>
 <div class="flex gap-8 text-sm font-bold text-gray-500 uppercase tracking-widest">
 <a class="hover:text-primary" href="{{ Asset('about') }}">@lang('front.about')</a>

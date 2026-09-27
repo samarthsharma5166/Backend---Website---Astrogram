@@ -4,7 +4,7 @@ return [
 
     'login_button' => "Login",
     'logout' => 'Logout',
-    'app_title' => 'Astro by rudragram',
+    'app_title' => 'AI Astro by RudraGram',
     // Info / Birth Details
     'user_info' => 'User Information',
     'birth_chart_details' => 'Provide your Birth Chart Details',
@@ -30,7 +30,7 @@ return [
     'birth_chart' => 'Birth Chart',
     'home' => 'Home',
     'contact_us' => 'Contact Us',
-    'footer' => 'Astro by rudragram. Mapping the cosmos for your evolution.',
+    'footer' => 'AI Astro by RudraGram. Mapping the cosmos for your evolution.',
     // Account
     'my_profile' => 'My Account',
     'wallet_balance' => 'Wallet Balance',
