@@ -133,15 +133,37 @@ class AccountController extends Controller {
 
     public function deleteAccount(Request $Request)
     {
-        if($Request->get('delete') === "DELETE")
+        if (strtoupper(trim((string)$Request->get('delete'))) === "DELETE")
         {
-            $user->tokens()->delete();
+            $authId = Auth::user()->id;
+            $user   = User::find($authId);
+
+            if ($user) {
+                // Delete sanctum tokens
+                $user->tokens()->delete();
+
+                // Delete related user records
+                try {
+                    DB::table('chat_messages')->where('user_id', $authId)->delete();
+                    DB::table('chat_sessions')->where('user_id', $authId)->delete();
+                    DB::table('wallet')->where('user_id', $authId)->delete();
+                    DB::table('push')->where('user_id', $authId)->delete();
+                } catch (\Exception $e) {
+                    \Log::warning('Error deleting user related records: ' . $e->getMessage());
+                }
+
+                // Permanently delete user record
+                $user->delete();
+            }
+
             return response()->json(['msg' => 'done']);
         }
         else
         {
-            return response()->json(['msg' => 'error','error' => 'Please write DELETE in capital latter to delete your account.']);
-            exit;
+            return response()->json([
+                'msg'   => 'error',
+                'error' => 'Please write DELETE in capital letters to delete your account.'
+            ], 400);
         }
     }
 
