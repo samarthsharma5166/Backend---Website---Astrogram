@@ -23,7 +23,8 @@ Route::get('homepageData', [ApiController::class, 'homepageData']);
 //Chat
 Route::post('chat/start', [ChatController::class, 'startChat']);
 Route::post('chat/send', [ChatController::class, 'sendMessage']);
-Route::get('chat/end', [ChatController::class, 'chatEnd']);
+Route::match(['get', 'post'], 'chat/end', [ChatController::class, 'chatEnd']);
+Route::match(['get', 'post'], 'chatEnd', [ChatController::class, 'chatEnd']);
 Route::get('chat/history', [ChatController::class, 'history']);
 Route::get('chat/session', [ChatController::class, 'sessionHistory']);
 

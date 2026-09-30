@@ -43,11 +43,22 @@ class KundaliController extends Controller {
         $language       = $info['language'] ?? 'Hinglish';
         $systemPrompt   = getPromp('kundali');
 
+        $currentDate    = date('l, F j, Y');
+        $currentYear    = date('Y');
+        $dateStr        = date('Y-m-d H:i:s') . " (Current Year: {$currentYear})";
+
         $systemPrompt = str_replace(
             ['{{name}}', '{{dob}}', '{{tob}}', '{{pob}}', '{{gender}}', '{{language}}','{date}'],
-            [$name, $dob, $tob, $pob, $gender, $language,date('Y-m-d H:i:s')],
+            [$name, $dob, $tob, $pob, $gender, $language, $dateStr],
             $systemPrompt
         );
+
+        $temporalNotice = "CURRENT REAL-TIME CONTEXT:\n"
+            . "- Today's Date: {$currentDate}\n"
+            . "- Current Year: {$currentYear}\n"
+            . "- IMPORTANT: All future planetary transits, dasha analysis, life events, and predictions MUST strictly be calculated starting from {$currentDate} ({$currentYear}) and future years. Never output past years.\n\n";
+
+        $systemPrompt = $temporalNotice . $systemPrompt;
 
         //Debit wallet
         $user->decrement('wallet', $setting->kundali_cost);
@@ -134,11 +145,22 @@ class KundaliController extends Controller {
         $timeline       = $info['timeline'] ?? 'timeline';
         $systemPrompt   = getPromp('predication');
 
+        $currentDate    = date('l, F j, Y');
+        $currentYear    = date('Y');
+        $dateStr        = date('Y-m-d H:i:s') . " (Current Year: {$currentYear})";
+
         $systemPrompt = str_replace(
             ['{{name}}', '{{dob}}', '{{tob}}', '{{pob}}', '{{gender}}', '{{language}}','{{category}}','{{timeline}}','{date}'],
-            [$name, $dob, $tob, $pob, $gender, $language,$category,$timeline,date('Y-m-d H:i:s')],
+            [$name, $dob, $tob, $pob, $gender, $language,$category,$timeline, $dateStr],
             $systemPrompt
         );
+
+        $temporalNotice = "CURRENT REAL-TIME CONTEXT:\n"
+            . "- Today's Date: {$currentDate}\n"
+            . "- Current Year: {$currentYear}\n"
+            . "- IMPORTANT: All future predictions, job timings, career events, marriage timelines, and planetary transits MUST strictly be calculated starting from {$currentDate} ({$currentYear}) and future years ({$currentYear}, " . ($currentYear + 1) . ", " . ($currentYear + 2) . ", etc.). Never give predictions for past years (2023, 2024, or 2025).\n\n";
+
+        $systemPrompt = $temporalNotice . $systemPrompt;
 
         //Debit wallet
         $user->decrement('wallet', $setting->predication_cost);
@@ -224,11 +246,22 @@ class KundaliController extends Controller {
         $timeline       = $info['timeline'] ?? 'timeline';
         $systemPrompt   = getPromp('horoscope');
 
+        $currentDate    = date('l, F j, Y');
+        $currentYear    = date('Y');
+        $dateStr        = date('Y-m-d H:i:s') . " (Current Year: {$currentYear})";
+
         $systemPrompt = str_replace(
             ['{{name}}', '{{dob}}', '{{tob}}', '{{pob}}', '{{gender}}', '{{language}}','{{timeline}}','{date}'],
-            [$name, $dob, $tob, $pob, $gender, $language,$timeline,date('Y-m-d H:i:s')],
+            [$name, $dob, $tob, $pob, $gender, $language,$timeline, $dateStr],
             $systemPrompt
         );
+
+        $temporalNotice = "CURRENT REAL-TIME CONTEXT:\n"
+            . "- Today's Date: {$currentDate}\n"
+            . "- Current Year: {$currentYear}\n"
+            . "- IMPORTANT: Horoscope predictions MUST be relative to {$currentDate} ({$currentYear}) and future periods.\n\n";
+
+        $systemPrompt = $temporalNotice . $systemPrompt;
 
         //Debit wallet
         $user->decrement('wallet', $setting->horoscope_cost);
@@ -323,7 +356,18 @@ class KundaliController extends Controller {
         $partnerGender  = $partner['gender'] ?? '';
         $language       = $partner['language'] ?? 'Hinglish';
         
-        $systemPrompt = str_replace(['{{my_name}}','{{my_dob}}','{{my_tob}}','{{my_pob}}','{{my_gender}}','{{partner_name}}','{{partner_dob}}','{{partner_tob}}','{{partner_pob}}','{{partner_gender}}','{{language}}','{date}'],[$myName,$myDob,$myTob,$myPob,$myGender,$partnerName,$partnerDob,$partnerTob,$partnerPob,$partnerGender,$language,date("Y-m-d H:i:s")],$systemPrompt);
+        $currentDate    = date('l, F j, Y');
+        $currentYear    = date('Y');
+        $dateStr        = date('Y-m-d H:i:s') . " (Current Year: {$currentYear})";
+
+        $systemPrompt = str_replace(['{{my_name}}','{{my_dob}}','{{my_tob}}','{{my_pob}}','{{my_gender}}','{{partner_name}}','{{partner_dob}}','{{partner_tob}}','{{partner_pob}}','{{partner_gender}}','{{language}}','{date}'],[$myName,$myDob,$myTob,$myPob,$myGender,$partnerName,$partnerDob,$partnerTob,$partnerPob,$partnerGender,$language,$dateStr],$systemPrompt);
+
+        $temporalNotice = "CURRENT REAL-TIME CONTEXT:\n"
+            . "- Today's Date: {$currentDate}\n"
+            . "- Current Year: {$currentYear}\n"
+            . "- IMPORTANT: Match analysis and future relationship timelines MUST be calculated relative to {$currentDate} ({$currentYear}) and future years.\n\n";
+
+        $systemPrompt = $temporalNotice . $systemPrompt;
 
         //Debit wallet
         $user->decrement('wallet', $setting->match_cost);
@@ -407,11 +451,21 @@ class KundaliController extends Controller {
         $language       = $info['language'] ?? 'Hinglish';
         $systemPrompt   = getPromp('baby');
 
+        $currentDate    = date('l, F j, Y');
+        $currentYear    = date('Y');
+        $dateStr        = date('Y-m-d H:i:s') . " (Current Year: {$currentYear})";
+
         $systemPrompt = str_replace(
-            ['{{dob}}', '{{tob}}', '{{pob}}', '{{gender}}', '{{language}}'],
-            [$dob, $tob, $pob, $gender, $language],
+            ['{{dob}}', '{{tob}}', '{{pob}}', '{{gender}}', '{{language}}', '{date}'],
+            [$dob, $tob, $pob, $gender, $language, $dateStr],
             $systemPrompt
         );
+
+        $temporalNotice = "CURRENT REAL-TIME CONTEXT:\n"
+            . "- Today's Date: {$currentDate}\n"
+            . "- Current Year: {$currentYear}\n\n";
+
+        $systemPrompt = $temporalNotice . $systemPrompt;
 
         //Debit wallet
         $user->decrement('wallet', $setting->name_cost);
