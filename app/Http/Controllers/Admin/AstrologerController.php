@@ -25,7 +25,7 @@ class AstrologerController extends Controller {
 		$data = [
 		
 		'data'	 => $Astrologer->getAll(),
-		'link'	 => Asset(env('admin').'/astrologer'),
+		'link'	 => adminUrl('astrologer'),
 		'title'	 => 'Manage Astrologer'
 
 		
@@ -46,7 +46,7 @@ class AstrologerController extends Controller {
         return View('admin.astrologer.add',[
         
         'data'          => new Astrologer,
-        'form_url'      => Asset(env('admin').'/astrologer'),
+        'form_url'      => adminUrl('astrologer'),
         'cates'         => $cate->getAll(),
 		'array'			=> []
         
@@ -63,7 +63,7 @@ class AstrologerController extends Controller {
 		$data = new Astrologer;	
 		$data->addNew($Request->all(),"add");
 
-		return Redirect(env('admin').'/astrologer')->with('message','New Astrologer Added Successfully.');
+		return Redirect(adminPrefix().'/astrologer')->with('message','New Astrologer Added Successfully.');
 	}
 	
 	/*
@@ -78,7 +78,7 @@ class AstrologerController extends Controller {
 		return View('admin.astrologer.edit',[
         
         'data'          => Astrologer::find($id),
-        'form_url' 	    => Asset(env('admin').'/astrologer/'.$id),
+        'form_url' 	    => adminUrl('astrologer/'.$id),
         'cates'         => $cate->getAll(),
         'array'         => AstroCate::where('astro_id',$id)->pluck('cate_id')->toArray()
         

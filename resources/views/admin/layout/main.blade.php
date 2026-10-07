@@ -116,7 +116,7 @@ if (Session::has('locale') && Session::get('locale') == "ar") {
       }).then((result) => {
         if (result.isConfirmed) {
 
-          window.location.href = "{{ Asset(env('admin')) }}/" + url;
+          window.location.href = "{{ adminUrl() }}/" + url;
 
         }
       });

@@ -23,7 +23,7 @@ class CategoryController extends Controller {
 		$data = [
 		
 		'data'	 => $category->getAll(),
-		'link'	 => Asset(env('admin').'/category'),
+		'link'	 => adminUrl('category'),
 		'title'	 => 'Manage Category'
 
 		
@@ -42,7 +42,7 @@ class CategoryController extends Controller {
 		return View('admin.category.add',[
         
         'data'          => new Category,
-        'form_url'      => Asset(env('admin').'/category')
+        'form_url'      => adminUrl('category')
         
         ]);
 	}
@@ -57,7 +57,7 @@ class CategoryController extends Controller {
 		$data = new Category;	
 		$data->addNew($Request->all(),"add");
 
-		return Redirect(env('admin').'/category')->with('message','New category Added Successfully.');
+		return Redirect(adminPrefix().'/category')->with('message','New category Added Successfully.');
 	}
 	
 	/*
@@ -70,7 +70,7 @@ class CategoryController extends Controller {
 		return View('admin.category.edit',[
         
         'data'          => Category::find($id),
-        'form_url' 	    => Asset(env('admin').'/category/'.$id),
+        'form_url' 	    => adminUrl('category/'.$id),
         
         ]);
 	}

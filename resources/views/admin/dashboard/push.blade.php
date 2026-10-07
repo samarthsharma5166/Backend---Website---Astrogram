@@ -13,7 +13,7 @@
                 <div class="flex justify-between flex-wrap items-center mb-6">
                     <h2 class="font-medium lg:text-2xl text-xl capitalize text-slate-900 inline-block ltr:pr-4 rtl:pl-4 mb-1 sm:mb-0">{{ __('admin.push_notification') }}</h2>
                     <div class="flex sm:space-x-4 space-x-2 sm:justify-end items-center rtl:space-x-reverse">
-                        <a class="btn inline-flex justify-center btn-light text-slate-700 dark:bg-slate-700 !font-normal dark:text-white" href="{{ Asset(env('admin').'/home') }}">
+                        <a class="btn inline-flex justify-center btn-light text-slate-700 dark:bg-slate-700 !font-normal dark:text-white" href="{{ adminUrl('home') }}">
                             <span class="flex items-center">
                                 <iconify-icon class="text-xl ltr:mr-2 rtl:ml-2 font-light" icon="lets-icons:back"></iconify-icon>
 
@@ -25,7 +25,7 @@
                 </div>
 
 
-                <form action="{{ Asset(env('admin').'/push') }}" method="POST" enctype="multipart/form-data" onsubmit="return chkForm()">
+                <form action="{{ adminUrl('push') }}" method="POST" enctype="multipart/form-data" onsubmit="return chkForm()">
 
                     @csrf
 

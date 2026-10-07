@@ -89,21 +89,21 @@
     overflow-hidden">
                 <ul class="py-1 text-sm text-slate-800 dark:text-slate-200">
                   <li>
-                    <a href="{{ Asset(env('admin').'/home') }}" class="block px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white font-inter text-sm text-slate-600
+                    <a href="{{ adminUrl('home') }}" class="block px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white font-inter text-sm text-slate-600
           dark:text-white font-normal">
                       <iconify-icon icon="heroicons-outline:home" class="relative top-[2px] text-lg ltr:mr-1 rtl:ml-1"></iconify-icon>
                       <span class="font-Inter">{{ __('admin.dashboard') }}</span>
                     </a>
                   </li>
                   <li>
-                    <a href="{{ Asset(env('admin').'/setting') }}" class="block px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white font-inter text-sm text-slate-600
+                    <a href="{{ adminUrl('setting') }}" class="block px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white font-inter text-sm text-slate-600
           dark:text-white font-normal">
                       <iconify-icon icon="heroicons-outline:cog-6-tooth" class="relative top-[2px] text-lg ltr:mr-1 rtl:ml-1"></iconify-icon>
                       <span class="font-Inter">{{ __('admin.account_setting') }}</span>
                     </a>
                   </li>
                   <li>
-                    <a href="{{ Asset(env('admin').'/logout') }}" class="block px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white font-inter text-sm text-slate-600
+                    <a href="{{ adminUrl('logout') }}" class="block px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white font-inter text-sm text-slate-600
           dark:text-white font-normal">
                       <iconify-icon class="relative top-[2px] text-lg ltr:mr-1 rtl:ml-1" icon="material-symbols:logout-sharp"></iconify-icon>
                       <span class="font-Inter">{{ __('admin.logout') }}</span>

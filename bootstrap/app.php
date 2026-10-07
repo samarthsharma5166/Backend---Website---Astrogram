@@ -19,7 +19,8 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->redirectGuestsTo(function () 
         {
-            return request()->is('backendLoginPanel/*') ? route('adminLogin') : Asset('index?loginRequired=true');
+            $prefix = adminPrefix();
+            return (request()->is($prefix . '/*') || request()->is($prefix)) ? route('adminLogin') : Asset('index?loginRequired=true');
         });
 
     })

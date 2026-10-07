@@ -20,7 +20,7 @@ class SettingController extends Controller
 		return view('admin.setting.index',[
             
         'data'      => Auth::guard('admin')->user(),
-        'form_url'  => Asset(env('admin').'/setting'),
+        'form_url'  => adminUrl('setting'),
         'setting'   => Setting::find(1)
         
         ]);

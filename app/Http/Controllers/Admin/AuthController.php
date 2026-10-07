@@ -19,11 +19,11 @@ class AuthController extends Controller
     {
 		if(Auth::guard('admin')->check())
 		{
-			return Redirect(env('admin').'/home');
+			return Redirect(adminPrefix().'/home');
 			exit;
 		}
 
-        return View('admin.auth.index',['form_url' => Asset(env('admin').'/login')]);
+        return View('admin.auth.index',['form_url' => adminUrl('login')]);
     }
 
     /*
@@ -38,7 +38,7 @@ class AuthController extends Controller
 
 		if (Auth::guard('admin')->attempt(['email' => $username, 'password' => $password,'status' => 0]))
 		{
-			return Redirect::to(env('admin').'/home')->with('message', 'Welcome ! Your are logged in now.');
+			return Redirect::to(adminPrefix().'/home')->with('message', 'Welcome ! Your are logged in now.');
 		}
 		else
 		{
@@ -50,13 +50,13 @@ class AuthController extends Controller
 	{
 		Auth::guard('admin')->logout();
 
-		return Redirect(env('admin').'/login')->with('message', 'Logout Successfully.');
+		return Redirect(adminPrefix().'/login')->with('message', 'Logout Successfully.');
 
 	}
 
 	public function forgot()
 	{
-		return View('admin.auth.forgot',['form_url' => Asset(env('admin').'/forgot')]);
+		return View('admin.auth.forgot',['form_url' => adminUrl('forgot')]);
 	}
 
 	public function _forgot(Request $Request)
@@ -73,7 +73,7 @@ class AuthController extends Controller
 				$message->to($chk->email)->subject("Reset your password");                        
 			});
 			
-			return Redirect(env('admin').'/login')->with('message','Password reset link has been sent on your email. Please check your email.');
+			return Redirect(adminPrefix().'/login')->with('message','Password reset link has been sent on your email. Please check your email.');
 		}
 		else
 		{
@@ -87,11 +87,11 @@ class AuthController extends Controller
 
 		if(isset($res->id))
 		{
-			return View('admin.auth.reset',['form_url' => Asset(env('admin').'/resetPassword?token='.$_GET['token'])]);
+			return View('admin.auth.reset',['form_url' => adminUrl('resetPassword?token='.$_GET['token'])]);
 		}
 		else
 		{
-			return Redirect(env('admin').'/login')->with('error','Link is expired. Please try again.');
+			return Redirect(adminPrefix().'/login')->with('error','Link is expired. Please try again.');
 		}
 	}
 

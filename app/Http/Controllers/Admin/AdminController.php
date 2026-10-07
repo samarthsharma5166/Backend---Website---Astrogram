@@ -32,7 +32,7 @@ class AdminController extends Controller {
 		$data = [
 		
 		'data'	 => $bank->getAll(),
-		'link'	 => Asset(env('admin').$this->url),
+		'link'	 => adminUrl($this->url),
 		'title'  => "Manage Staff Users",
 		
 		];
@@ -51,7 +51,7 @@ class AdminController extends Controller {
 		
 		'data' 		=> new Admin,
 		'path' 		=> $this->folder,
-		'form_url' 	=> Asset(env('admin').$this->url),
+		'form_url' 	=> adminUrl($this->url),
 		
 		]);
 	}
@@ -76,7 +76,7 @@ class AdminController extends Controller {
 
 		$add  = $data->updateData($Request->all(),"add");
 
-		return Redirect(env('admin').$this->url)->with('message','New Staff User Added Successfully.');
+		return Redirect(adminPrefix().$this->url)->with('message','New Staff User Added Successfully.');
 	}
 
 	/*
@@ -92,7 +92,7 @@ class AdminController extends Controller {
 		
 			'data' 		=> $res,
 			'path' 		=> $this->folder,
-			'form_url' 	=> Asset(env('admin').$this->url.'/'.$id),
+			'form_url' 	=> adminUrl($this->url.'/'.$id),
 		
 		]);
 	}

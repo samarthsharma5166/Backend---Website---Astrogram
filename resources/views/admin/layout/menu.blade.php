@@ -3,7 +3,7 @@
 <div class="sidebar-wrapper group">
     <div id="bodyOverlay" class="w-screen h-screen fixed top-0 bg-slate-900 bg-opacity-50 backdrop-blur-sm z-10 hidden"></div>
     <div class="logo-segment">
-        <a class="flex items-center" href="{{ Asset(env('admin')) }}">
+        <a class="flex items-center" href="{{ adminUrl() }}">
 
             <img src="{{ getAsset('logo') }}" class="black_logo" alt="logo" style="max-width: 170px;">
 
@@ -30,7 +30,7 @@ opacity-0"></div>
             <li class="sidebar-menu-title">{{ __('admin.menu') }}</li>
 
             <li class="">
-                <a href="{{ Asset(env('admin').'/home') }}" class="navItem @if($page == 'home') active @endif">
+                <a href="{{ adminUrl('home') }}" class="navItem @if($page == 'home') active @endif">
                     <span class="flex items-center">
                         <iconify-icon class=" nav-icon" icon="heroicons-outline:home"></iconify-icon>
                         <span>{{ __('admin.dashboard') }}</span>
@@ -42,7 +42,7 @@ opacity-0"></div>
 
 
             <li class="">
-                <a href="{{ Asset(env('admin').'/setting') }}" class="navItem @if($page == 'setting') active @endif">
+                <a href="{{ adminUrl('setting') }}" class="navItem @if($page == 'setting') active @endif">
                     <span class="flex items-center">
                         <iconify-icon class=" nav-icon" icon="heroicons-outline:cog-6-tooth"></iconify-icon>
                         <span>{{ __('admin.system_setting') }}</span>
@@ -54,7 +54,7 @@ opacity-0"></div>
             <li class="sidebar-menu-title">{{ __('admin.category_astrologers') }}</li>
 
             <li class="">
-                <a href="{{ Asset(env('admin').'/category') }}" class="navItem @if($page == 'category') active @endif">
+                <a href="{{ adminUrl('category') }}" class="navItem @if($page == 'category') active @endif">
                     <span class="flex items-center">
                         <iconify-icon class=" nav-icon" icon="material-symbols:tag"></iconify-icon>
                         <span>{{ __('admin.manage_category') }}</span>
@@ -63,7 +63,7 @@ opacity-0"></div>
             </li>
 
             <li class="">
-                <a href="{{ Asset(env('admin').'/astrologer') }}" class="navItem @if($page == 'astrologer') active @endif">
+                <a href="{{ adminUrl('astrologer') }}" class="navItem @if($page == 'astrologer') active @endif">
                     <span class="flex items-center">
                         <iconify-icon class=" nav-icon" icon="material-symbols:frame-person-mic-outline-sharp"></iconify-icon>
                         <span>{{ __('admin.manage_astrologer') }}</span>
@@ -75,7 +75,7 @@ opacity-0"></div>
 
 
             <li class="">
-                <a href="{{ Asset(env('admin').'/appUser') }}" class="navItem @if($page == 'appUser') active @endif">
+                <a href="{{ adminUrl('appUser') }}" class="navItem @if($page == 'appUser') active @endif">
                     <span class="flex items-center">
                         <iconify-icon class=" nav-icon" icon="material-symbols:person-add-rounded"></iconify-icon>
                         <span>{{ __('admin.app_users') }}</span>
@@ -84,7 +84,7 @@ opacity-0"></div>
             </li>
 
             <li class="">
-                <a href="{{ Asset(env('admin').'/push') }}" class="navItem @if($page == 'push') active @endif">
+                <a href="{{ adminUrl('push') }}" class="navItem @if($page == 'push') active @endif">
                     <span class="flex items-center">
                         <iconify-icon class=" nav-icon" icon="material-symbols:circle-notifications-outline"></iconify-icon>
                         <span>{{ __('admin.push_notifications') }}</span>

@@ -44,7 +44,7 @@ class DashboardController extends Controller
 
 	public function frontEnd()
 	{
-		return view('admin.dashboard.front',['data' => Auth::guard('admin')->user(),'form_url' => Asset(env('admin').'/frontEnd')]);
+		return view('admin.dashboard.front',['data' => Auth::guard('admin')->user(),'form_url' => adminUrl('frontEnd')]);
 	}
 
 	public function _frontEnd(Request $Request)

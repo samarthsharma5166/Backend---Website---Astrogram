@@ -21,7 +21,7 @@
                         <div class="card-body flex flex-col p-6">
                             <div class="card-text h-full space-y-4">
 
-                                <form action="{{ Asset(env('admin').'/appUser') }}">
+                                <form action="{{ adminUrl('appUser') }}">
 
                                     <div class="grid grid-cols-12 gap-5">
                                         <div class="xl:col-span-3 lg:col-span-5 col-span-12">
@@ -66,7 +66,7 @@
                                             @foreach($data as $row)
                                             <tr>
                                                 <td width="5%" class="table-td">{{ $i++ }}</td>
-                                                <td width="15%" class="table-td"><a href="{{ Asset(env('admin').'/viewUser?user_id='.$row->id) }}" class="text-primary-500">{{ $row->name }}</a></td>
+                                                <td width="15%" class="table-td"><a href="{{ adminUrl('viewUser?user_id='.$row->id) }}" class="text-primary-500">{{ $row->name }}</a></td>
                                                 <td width="15%" class="table-td">{{ $row->phone }}</td>
                                                 <td width="15%" class="table-td" style="text-transform: lowercase;">{{ $row->email }}</td>
                                                 <td width="15%" class="table-td">{{ $row->countChat($row->id) }}</td>
@@ -84,13 +84,13 @@
                                                         </button>
                                                         <ul class="dropdown-menu min-w-max absolute text-sm text-slate-700 dark:text-white hidden bg-white dark:bg-slate-700 shadow z-[2] float-left overflow-hidden list-none text-left rounded-lg mt-1 m-0 bg-clip-padding border-none">
                                                             <li>
-                                                                <a href="{{ Asset(env('admin').'/appUserEdit?id='.$row->id) }}" class="hover:bg-slate-900 dark:hover:bg-slate-600 dark:hover:bg-opacity-70 hover:text-white w-full border-b border-b-gray-500 border-opacity-10 px-4 py-2 text-sm dark:text-slate-300 last:mb-0 cursor-pointer first:rounded-t last:rounded-b flex space-x-2 items-center capitalize rtl:space-x-reverse">
+                                                                <a href="{{ adminUrl('appUserEdit?id='.$row->id) }}" class="hover:bg-slate-900 dark:hover:bg-slate-600 dark:hover:bg-opacity-70 hover:text-white w-full border-b border-b-gray-500 border-opacity-10 px-4 py-2 text-sm dark:text-slate-300 last:mb-0 cursor-pointer first:rounded-t last:rounded-b flex space-x-2 items-center capitalize rtl:space-x-reverse">
                                                                     <iconify-icon icon="clarity:note-edit-line"></iconify-icon>
                                                                     <span>{{ __('admin.edit_details') }}</span></a>
                                                             </li>
 
                                                             <li>
-                                                                <a href="{{ Asset(env('admin').'/viewUser?user_id='.$row->id) }}" class="hover:bg-slate-900 dark:hover:bg-slate-600 dark:hover:bg-opacity-70 hover:text-white w-full border-b border-b-gray-500 border-opacity-10 px-4 py-2 text-sm dark:text-slate-300 last:mb-0 cursor-pointer first:rounded-t last:rounded-b flex space-x-2 items-center capitalize rtl:space-x-reverse">
+                                                                <a href="{{ adminUrl('viewUser?user_id='.$row->id) }}" class="hover:bg-slate-900 dark:hover:bg-slate-600 dark:hover:bg-opacity-70 hover:text-white w-full border-b border-b-gray-500 border-opacity-10 px-4 py-2 text-sm dark:text-slate-300 last:mb-0 cursor-pointer first:rounded-t last:rounded-b flex space-x-2 items-center capitalize rtl:space-x-reverse">
                                                                     <iconify-icon icon="material-symbols:undereye-rounded"></iconify-icon>
                                                                     <span>{{ __('admin.view_details') }}</span></a>
                                                             </li>

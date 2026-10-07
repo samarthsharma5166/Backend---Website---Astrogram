@@ -3,6 +3,17 @@ use Carbon\Carbon;
 use App\Models\Admin;
 use App\Models\Setting;
 
+function adminPrefix()
+{
+   return config('app.admin') ?: (env('admin') ?: 'backendLoginPanel');
+}
+
+function adminUrl($path = '')
+{
+   $prefix = adminPrefix();
+   return Asset($prefix . ($path ? '/' . ltrim($path, '/') : ''));
+}
+
 function showAdminAmount($amount)
 {
    $admin = getAdmin();
