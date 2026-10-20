@@ -346,10 +346,16 @@ class ChatController extends Controller {
 
 	public function sessionHistory(Request $request)
 	{
-		$sessionId  = $request->query('session_id');
-		$res 		= ChatMessage::where('chat_session_id', $sessionId)->orderBy('id')->get();
-		$session 	= ChatSession::find($sessionId);
-		$output 	= [];
+		$sessionId = $request->query('session_id');
+		if (!$sessionId) {
+			return response()->json(['data' => [], 'session_started_at' => null]);
+		}
+		$session = ChatSession::find($sessionId);
+		if (!$session) {
+			return response()->json(['data' => [], 'session_started_at' => null]);
+		}
+		$res 	= ChatMessage::where('chat_session_id', $sessionId)->orderBy('id')->get();
+		$output = [];
 
 		foreach ($res as $row) {
 
@@ -365,7 +371,7 @@ class ChatController extends Controller {
 			}
 		}
 
-    return response()->json(['data' => $output,'session_started_at' => $session->started_at]);
+		return response()->json(['data' => $output,'session_started_at' => $session->started_at]);
 	}
 
 	private function formatSecondsToMinute($seconds): string

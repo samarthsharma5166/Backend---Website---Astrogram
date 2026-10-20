@@ -22,25 +22,29 @@ use Str;
 
 class ChatController extends Controller
 {
-    public function index(Request $request,$astro_id)
+    public function index(Request $request, $astro_id)
     {
-        if(!$request->has('session_id'))
-        {
-            $chk = ChatSession::where('astrologer_id',$astro_id)->where('status','active')->first();
+        $astro = Astrologer::find($astro_id);
+        if (!$astro) {
+            abort(404, 'Astrologer not found');
+        }
 
-            if(isset($chk->id))
-            {
-                return Redirect('chat/'.$astro_id.'?session_id='.$chk->id);
+        if (!$request->has('session_id')) {
+            $chk = ChatSession::where('user_id', Auth::user()->id)
+                ->where('astrologer_id', $astro_id)
+                ->where('status', 'active')
+                ->first();
+
+            if (isset($chk->id)) {
+                return Redirect('chat/' . $astro_id . '?session_id=' . $chk->id);
             }
         }
 
-        return View('chat.index',[
-
-        'astro'     => Astrologer::find($astro_id),
-        'info'      => Auth::user()->info,
-        'session'   => !$request->has('session_id') ? $this->sessionHistory() : [],
-        'setting'   => getSetting()
-
+        return View('chat.index', [
+            'astro'   => $astro,
+            'info'    => Auth::user()->info,
+            'session' => $request->has('session_id') ? $this->sessionHistory($request) : [],
+            'setting' => getSetting()
         ]);
     }
 
@@ -78,34 +82,49 @@ class ChatController extends Controller
         return View('chat.history',['data' => $res]);
     }
 
-    public function sessionHistory(Request $request)
+    public function sessionHistory(Request $request = null)
     {
-        $sessionId  = $request->query('session_id');
-        $res 		= ChatMessage::where('chat_session_id', $sessionId)->orderBy('id')->get();
-		$session 	= ChatSession::find($sessionId);
-		$output 	= [];
+        $sessionId = $request ? $request->query('session_id') : null;
+        if (!$sessionId) {
+            return [
+                'data'               => [],
+                'session_started_at' => null,
+                'status'             => 'ended',
+                'total'              => 0,
+            ];
+        }
 
-		foreach ($res as $row) {
+        $session = ChatSession::find($sessionId);
+        if (!$session) {
+            return [
+                'data'               => [],
+                'session_started_at' => null,
+                'status'             => 'ended',
+                'total'              => 0,
+            ];
+        }
 
-			$parts = array_filter(array_map('trim', explode('|', $row->message)));
+        $res    = ChatMessage::where('chat_session_id', $sessionId)->orderBy('id')->get();
+        $output = [];
 
-			foreach ($parts as $text) {
-				$output[] = [
-					'id' 			=> $row->id,
-					'message'      	=> $text,
-					'sender'    	=> $row->sender,
-					'created_at'	=> $row->created_at?->format('h:i A'),
-				];
-			}
-		}
+        foreach ($res as $row) {
+            $parts = array_filter(array_map('trim', explode('|', $row->message)));
+
+            foreach ($parts as $text) {
+                $output[] = [
+                    'id'         => $row->id,
+                    'message'    => $text,
+                    'sender'     => $row->sender,
+                    'created_at' => $row->created_at?->format('h:i A'),
+                ];
+            }
+        }
 
         return [
-
-        'data'                  => $output,
-        'session_started_at'    => $session->started_at,
-        'status'                => $session->status,
-        'total'                 => $session->status == "ended" ? $session->secToMin($session->total_seconds) : 0
-
+            'data'               => $output,
+            'session_started_at' => $session->started_at,
+            'status'             => $session->status,
+            'total'              => $session->status == "ended" ? $session->secToMin($session->total_seconds) : 0
         ];
     }
 }
