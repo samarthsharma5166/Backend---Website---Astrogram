@@ -1,7 +1,7 @@
 <script>
 /* ================= GLOBALS ================= */
 let sessionId = null;
-const astroId = {{ $astro->id }};
+const astroId = "{{ $astro->id }}";
 const userInfo = @json($info);
 let isStarting = false;
 const DEBUG = true;

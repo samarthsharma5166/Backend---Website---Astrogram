@@ -51,7 +51,7 @@ body { font-family: 'Epilogue', sans-serif; }
         <div class="flex items-center gap-3">
             <div class="bg-green-50 px-3 py-1 rounded-md text-center">
                 <span class="text-[10px] font-bold text-slate-400 uppercase">@lang('front.wallet')</span>
-                <div class="text-green-600 font-bold text-sm" id="userWalletBalance">{{ $setting->currency }}{{ number_format(auth()->user()->wallet, 2) }}</div>
+                <div class="text-green-600 font-bold text-sm" id="userWalletBalance">{{ $setting->currency }}{{ number_format(auth()->user()->wallet ?? 0, 2) }}</div>
             </div>
             <div class="bg-orange-50 px-3 py-1 rounded-md text-center">
                 <span class="text-[10px] font-bold text-slate-400 uppercase">@lang('front.session')</span>
