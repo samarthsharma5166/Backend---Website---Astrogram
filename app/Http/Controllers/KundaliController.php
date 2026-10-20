@@ -23,11 +23,9 @@ class KundaliController extends Controller
         $setting = getSetting();
 
         return View('kundali.kundali',[
-
-        'user'          => Auth::user(),
-        'setting'       => $setting,
-        'haveBalance'   => Auth::user()->wallet > $setting->kundali_cost ? true : false
-
+            'user'        => Auth::user(),
+            'setting'     => $setting,
+            'haveBalance' => (Auth::user()->wallet ?? 0) >= ($setting->kundali_cost ?? 0)
         ]);
     }
 
@@ -43,11 +41,9 @@ class KundaliController extends Controller
         $setting = getSetting();
         
         return View('kundali.predication',[
-
-        'user'          => Auth::user(),
-        'setting'       => $setting,
-        'haveBalance'   => Auth::user()->wallet > $setting->predication_cost ? true : false
-
+            'user'        => Auth::user(),
+            'setting'     => $setting,
+            'haveBalance' => (Auth::user()->wallet ?? 0) >= ($setting->predication_cost ?? 0)
         ]);
     }
 
@@ -63,11 +59,9 @@ class KundaliController extends Controller
         $setting = getSetting();
         
         return View('kundali.horoscope',[
-
-        'user'          => Auth::user(),
-        'setting'       => $setting,
-        'haveBalance'   => Auth::user()->wallet > $setting->horoscope_cost ? true : false
-
+            'user'        => Auth::user(),
+            'setting'     => $setting,
+            'haveBalance' => (Auth::user()->wallet ?? 0) >= ($setting->horoscope_cost ?? 0)
         ]);
     }
 
@@ -83,11 +77,9 @@ class KundaliController extends Controller
         $setting = getSetting();
         
         return View('kundali.match',[
-
-        'user'          => Auth::user(),
-        'setting'       => $setting,
-        'haveBalance'   => Auth::user()->wallet > $setting->match_cost ? true : false
-
+            'user'        => Auth::user(),
+            'setting'     => $setting,
+            'haveBalance' => (Auth::user()->wallet ?? 0) >= ($setting->match_cost ?? 0)
         ]);
     }
 
@@ -103,11 +95,9 @@ class KundaliController extends Controller
         $setting = getSetting();
         
         return View('kundali.baby',[
-
-        'user'          => Auth::user(),
-        'setting'       => $setting,
-        'haveBalance'   => Auth::user()->wallet > $setting->name_cost ? true : false
-
+            'user'        => Auth::user(),
+            'setting'     => $setting,
+            'haveBalance' => (Auth::user()->wallet ?? 0) >= ($setting->name_cost ?? 0)
         ]);
     }
 

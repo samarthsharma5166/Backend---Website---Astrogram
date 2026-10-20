@@ -82,10 +82,12 @@ class CategoryController extends Controller {
 	*/
 	public function update(Request $Request,$id)
 	{				
-		$data       = Category::find($id);	
-		$data->addNew($Request->all(),$id);
+		$data = Category::find($id);	
+		if ($data) {
+			$data->addNew($Request->all(),$id);
+		}
 
-		return Redirect(env('admin').'/category')->with('message','category Updated Successfully.');
+		return Redirect(adminUrl('category'))->with('message','Category Updated Successfully.');
 	}
 	
 	/*
@@ -95,16 +97,23 @@ class CategoryController extends Controller {
 	*/
 	public function delete()
 	{				
-		$data = Category::find($_GET['id'])->delete();	
+		$id = request('id');
+		$cat = Category::find($id);
+		if ($cat) {
+			$cat->delete();
+		}
 			
-		return Redirect(env('admin').'/category')->with('message','category Deleted Successfully.');
+		return Redirect(adminUrl('category'))->with('message','Category Deleted Successfully.');
 	}
 
 	public function status()
     {
-        $res            = Category::find($_GET['id']);
-        $res->status    = $res->status == 0 ? 1 : 0;
-        $res->save();
+        $id = request('id');
+        $res = Category::find($id);
+        if ($res) {
+            $res->status = $res->status == 0 ? 1 : 0;
+            $res->save();
+        }
 
 		return Redirect::back()->with('message','Status Changed Successfully.');
 

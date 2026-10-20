@@ -78,24 +78,30 @@ class AccountController extends Controller
 
     public function stripeSuccess(Request $request)
     {
-        $setting = getSetting();
+        if (!$request->session_id) {
+            return Redirect('account')->with('error', 'Invalid payment session.');
+        }
 
-        Stripe::setApiKey($setting->stripe_sec);
+        try {
+            $setting = getSetting();
+            Stripe::setApiKey($setting->stripe_sec);
 
-        $session = \Stripe\Checkout\Session::retrieve($request->session_id);
+            $session = \Stripe\Checkout\Session::retrieve($request->session_id);
 
-        if ($session->payment_status === 'paid') {
+            if ($session->payment_status === 'paid') {
+                $res = new Wallet;
+                $res->addNew([
+                    'amount'         => $session->amount_total / 100,
+                    'payment_method' => "Card",
+                ]);
 
+                return Redirect('account')->with('message', 'Wallet recharged successfully');
+            }
 
-            $res     = new Wallet;
-            $res->addNew([
-            
-            'amount' => $session->amount_total / 100,
-            'payment_method' => "Card",
-
-            ]);
-
-            return Redirect('account')->with('message','Wallet recharged successfully');
+            return Redirect('account')->with('error', 'Payment was not successful.');
+        } catch (\Throwable $e) {
+            \Log::error('Stripe success error: ' . $e->getMessage());
+            return Redirect('account')->with('error', 'Payment verification failed: ' . $e->getMessage());
         }
     }
 

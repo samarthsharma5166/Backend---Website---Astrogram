@@ -92,10 +92,12 @@ class AstrologerController extends Controller {
 	*/
 	public function update(Request $Request,$id)
 	{				
-		$data       = Astrologer::find($id);	
-		$data->addNew($Request->all(),$id);
+		$data = Astrologer::find($id);	
+		if ($data) {
+			$data->addNew($Request->all(),$id);
+		}
 
-		return Redirect(env('admin').'/astrologer')->with('message','Astrologer Updated Successfully.');
+		return Redirect(adminUrl('astrologer'))->with('message','Astrologer Updated Successfully.');
 	}
 	
 	/*
@@ -105,18 +107,24 @@ class AstrologerController extends Controller {
 	*/
 	public function delete()
 	{				
-		$data = Astrologer::find($_GET['id'])->delete();	
-
-		AstroCate::where('astro_id',$_GET['id'])->delete();
+		$id = request('id');
+		$astro = Astrologer::find($id);
+		if ($astro) {
+			$astro->delete();
+			AstroCate::where('astro_id', $id)->delete();
+		}
 			
-		return Redirect(env('admin').'/astrologer')->with('message','Astrologer Deleted Successfully.');
+		return Redirect(adminUrl('astrologer'))->with('message','Astrologer Deleted Successfully.');
 	}
 
 	public function status()
     {
-        $res            = Astrologer::find($_GET['id']);
-        $res->status    = $res->status == 0 ? 1 : 0;
-        $res->save();
+        $id = request('id');
+        $res = Astrologer::find($id);
+        if ($res) {
+            $res->status = $res->status == 0 ? 1 : 0;
+            $res->save();
+        }
 
 		return Redirect::back()->with('message','Status Changed Successfully.');
 

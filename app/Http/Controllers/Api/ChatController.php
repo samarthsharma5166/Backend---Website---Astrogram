@@ -23,7 +23,10 @@ class ChatController extends Controller {
 	
 	public function startChat(Request $Request)
     {
-        $astro  		= Astrologer::find($Request->get('astro_id'));
+        $astro = Astrologer::find($Request->get('astro_id'));
+        if (!$astro) {
+            return response()->json(['error' => 'Astrologer not found'], 404);
+        }
 		$promptTemplate = getPromp('chat');
 		$info   		= $Request->get('user_info');
         $userName   	= $info['name']   ?? 'Not Provided';

@@ -34,10 +34,12 @@ class DashboardController extends Controller
         ]);
 	}
 
-	public function setLang()
+	public function setLang(Request $request)
 	{
-		Session::put('locale', $_GET['lang']);
-		Session::put('flag', $_GET['flag']);
+		$lang = $request->query('lang', 'en');
+		$flag = $request->query('flag', 'circle-flags:uk');
+		Session::put('locale', $lang);
+		Session::put('flag', $flag);
     		
 		return Redirect::back()->with('message', 'Language Changed Successfully.');
 	}
@@ -105,63 +107,75 @@ class DashboardController extends Controller
     {
 		$res = new User;
 
-        return View('admin.dashboard.appUser',['data' => $res->getAll(),'q' => isset($_GET['q']) ? $_GET['q'] : null,'setting' => getSetting()]);
+        return View('admin.dashboard.appUser',['data' => $res->getAll(),'q' => request('q'),'setting' => getSetting()]);
     }
 
-	public function appUserEdit()
+	public function appUserEdit(Request $request)
     {        
-        return View('admin.dashboard.userEdit',['data' => User::find($_GET['id'])]);
+        $user = User::find($request->query('id'));
+        if (!$user) {
+            return Redirect::back()->with('error', 'User not found.');
+        }
+        return View('admin.dashboard.userEdit',['data' => $user]);
     }
 
     public function _appUserEdit(Request $Request)
     {        
-        $res            = User::find($Request->get('id'));
+        $res = User::find($Request->get('id'));
+        if (!$res) {
+            return Redirect::back()->with('error', 'User not found.');
+        }
         $res->name      = $Request->get('name');
         $res->phone     = $Request->get('phone');
         $res->email     = $Request->get('email');
         $res->country   = $Request->get('country');
-        $res->Save();
+        $res->save();
 
         return Redirect::back()->with('message','App User Updated Successfully.');
     }
 
     public function updateWallet(Request $Request)
     {
-        $res        = User::find($Request->get('user_id'));
-        
+        $res = User::find($Request->get('user_id'));
+        if (!$res) {
+            return Redirect::back()->with('error', 'User not found.');
+        }
+
+        $amount = (float)$Request->get('amount');
         if($Request->get('type') == "Credit")
         {
-            $res->wallet += $Request->get('amount');
+            $res->wallet = ($res->wallet ?? 0) + $amount;
         }
         else
         {
-            $res->wallet -= $Request->get('amount');
+            $res->wallet = max(0, ($res->wallet ?? 0) - $amount);
         }
 
         $res->save();
 
-        $wallet 						= new Wallet;
-		$wallet->user_id 				= $res->id;
-		$wallet->amount 				= $Request->get('amount');
-		$wallet->type 					= $Request->get('type');
-		$wallet->payment_method 		= "Admin";
-		$wallet->notes 					= "Admin updated wallet";
-		$wallet->save();
+        $wallet                  = new Wallet;
+        $wallet->user_id         = $res->id;
+        $wallet->amount          = $amount;
+        $wallet->type            = $Request->get('type');
+        $wallet->payment_method  = "Admin";
+        $wallet->notes           = "Admin updated wallet";
+        $wallet->save();
 
         return Redirect::back()->with('message','Wallet Updated Successfully.');
-
     }
 
-    public function viewUser()
+    public function viewUser(Request $request)
     {        
-        $res    = User::find($_GET['user_id']);
+        $userId = $request->query('user_id');
+        $res = User::find($userId);
+        if (!$res) {
+            return Redirect::back()->with('error', 'User not found.');
+        }
 
         return View('admin.dashboard.view_user',[
-
-        'user'      => $res,
-        'trans'     => Wallet::where('user_id',$_GET['user_id'])->orderBy('id','DESC')->get(),
-		'setting'	=> getSetting()
-
+            'user'    => $res,
+            'trans'   => Wallet::where('user_id', $userId)->orderBy('id','DESC')->get(),
+            'setting' => getSetting()
         ]);
     }
 }

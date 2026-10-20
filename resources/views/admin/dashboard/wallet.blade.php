@@ -15,7 +15,7 @@
                 <!-- Modal body -->
                 <div class="p-6 space-y-4">
 
-                    <form action="{{ Asset(env('admin').'/updateWallet') }}" method="POST">
+                    <form action="{{ adminUrl('updateWallet') }}" method="POST">
 
                         @csrf
 

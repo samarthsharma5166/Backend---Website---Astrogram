@@ -4,7 +4,7 @@
       <div class="app-header z-[999] ltr:ml-[248px] rtl:mr-[248px] bg-white dark:bg-slate-800 shadow-sm dark:shadow-slate-700">
         <div class="flex justify-between items-center h-full">
           <div class="flex items-center md:space-x-4 space-x-2 xl:space-x-0 rtl:space-x-reverse vertical-box">
-            <a href="{{ Asset(env('admin')) }}" class="mobile-logo xl:hidden inline-block">
+            <a href="{{ adminUrl('home') }}" class="mobile-logo xl:hidden inline-block">
               <img src="{{ Asset('assets/images/logo/logo-c.svg') }}" class="black_logo" alt="logo">
               <img src="{{ Asset('assets/images/logo/logo-c-white.svg') }}" class="white_logo" alt="logo">
             </a>
@@ -47,7 +47,7 @@
           overflow-hidden">
                 <ul class="py-1 text-sm text-slate-800 dark:text-slate-200">
                   <li>
-                    <a href="{{ Asset(env('admin').'/setLang?lang=en&flag=circle-flags:uk') }}" class="flex items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white">
+                    <a href="{{ adminUrl('setLang?lang=en&flag=circle-flags:uk') }}" class="flex items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white">
                       <iconify-icon icon="circle-flags:uk" class="ltr:mr-2 rtl:ml-2 text-xl"></iconify-icon>
                       <span class="font-medium">{{ __('admin.english') }}</span>
                     </a>
@@ -128,7 +128,7 @@
     <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
       <div class="modal-dialog relative w-auto pointer-events-none top-1/4">
         <div class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white dark:bg-slate-900 bg-clip-padding rounded-md outline-none text-current">
-          <form action="{{ Asset(env('admin').'/company') }}">
+          <form action="{{ adminUrl('appUser') }}">
             <div class="relative">
               <input type="text" class="form-control !py-3 !pr-12" placeholder="{{ __('admin.search_placeholder') }}" name="q">
               <button class="absolute right-0 top-1/2 -translate-y-1/2 w-9 h-full border-l text-xl border-l-slate-200 dark:border-l-slate-600 dark:text-slate-300 flex items-center justify-center">

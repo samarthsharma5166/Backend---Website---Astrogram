@@ -117,7 +117,7 @@ class AdminController extends Controller {
 
 		$data->updateData($Request->all(),$id);
 
-		return Redirect(env('admin').$this->url)->with('message','Staff User Updated Successfully.');
+		return Redirect(adminPrefix().$this->url)->with('message','Staff User Updated Successfully.');
 	}
 	
 	/*
@@ -127,27 +127,36 @@ class AdminController extends Controller {
 	*/
 	public function delete()
 	{				
-		$data = Admin::find($_GET['id'])->delete();	
+		$id = request('id');
+		$admin = Admin::find($id);
+		if ($admin) {
+			$admin->delete();
+		}
 			
-		return Redirect(env('admin').$this->url)->with('message','Staff User Deleted Successfully.');
+		return Redirect(adminPrefix().$this->url)->with('message','Staff User Deleted Successfully.');
 	}
 
     public function status()
     {
-        $res            = Admin::find($_GET['id']);
-        $res->status    = $res->status == 0 ? 1 : 0;
-        $res->save();
+        $id = request('id');
+        $res = Admin::find($id);
+        if ($res) {
+            $res->status = $res->status == 0 ? 1 : 0;
+            $res->save();
+        }
 
-		return Redirect(env('admin').$this->url)->with('message','Staff User Status Changed Successfully.');
+		return Redirect(adminPrefix().$this->url)->with('message','Staff User Status Changed Successfully.');
 
     }
 
 	public function adminPerm(Request $Request)
 	{
-		$update 		= Admin::find($Request->get('id'));
-		$update->perm 	= implode(",",$Request->get('perm'));
-		$update->save();
+		$update = Admin::find($Request->get('id'));
+		if ($update) {
+			$update->perm = implode(",", (array)$Request->get('perm'));
+			$update->save();
+		}
 
-		return Redirect(env('admin').$this->url)->with('message','Staff Permission Assigned Successfully.');
+		return Redirect(adminPrefix().$this->url)->with('message','Staff Permission Assigned Successfully.');
 	}
 }
