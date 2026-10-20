@@ -50,7 +50,7 @@
                             <button class="btn btn-dark block w-full text-center">{{ __('admin.send_reset_link') }}</button>
                         </form>
                         <br>
-                        <p class="text-center"><a href="{{ Asset(env('admin').'/login') }}" class="text-sm text-slate-800 dark:text-slate-400 leading-6 font-medium">{{ __('admin.back_to_login') }}</a></p>
+                        <p class="text-center"><a href="{{ adminUrl('login') }}" class="text-sm text-slate-800 dark:text-slate-400 leading-6 font-medium">{{ __('admin.back_to_login') }}</a></p>
                     </div>
                 </div>
             </div>

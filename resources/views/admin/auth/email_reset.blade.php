@@ -57,7 +57,7 @@
             <p>@lang('front.dear') {{ $res->name }},</p>
             <p>@lang('front.pass_desc')</p>
             <p>
-                <a href="{{ Asset(env('admin').'/resetPassword?token='.$res->reset_key) }}" class="button" target="_blank">@lang('front.reset_pass')</a>
+                <a href="{{ adminUrl('resetPassword?token=' . $res->reset_key) }}" class="button" target="_blank">@lang('front.reset_pass')</a>
             </p>
             <p>@lang('front.pass_text')</p>
         </div>

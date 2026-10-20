@@ -56,7 +56,7 @@
                                     <input type="checkbox" class="hiddens">
                                     <span class="text-slate-500 dark:text-slate-400 text-sm leading-6 capitalize">&nbsp;&nbsp;{{ __('admin.keep_signin') }}</span>
                                 </label>
-                                <a class="text-sm text-slate-800 dark:text-slate-400 leading-6 font-medium" href="{{ Asset(env('admin').'/forgot') }}">{{ __('admin.forgot_pass_link') }}</a>
+                                <a class="text-sm text-slate-800 dark:text-slate-400 leading-6 font-medium" href="{{ adminUrl('forgot') }}">{{ __('admin.forgot_pass_link') }}</a>
                             </div>
                             <br>
                             <button class="btn btn-dark block w-full text-center">{{ __('admin.sign_in') }}</button>

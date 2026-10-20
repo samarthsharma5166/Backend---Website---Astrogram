@@ -38,9 +38,12 @@ function getSetting()
 
 function getAsset($type)
 {
-   $admin   = getSetting();
+   $admin = getSetting();
+   if (!$admin) {
+      return Asset('upload/admin/default.png');
+   }
 
-   return Asset('upload/admin/'.$admin->$type);
+   return Asset('upload/admin/' . ($admin->$type ?? ''));
 }
 
  function getPromp($type)
